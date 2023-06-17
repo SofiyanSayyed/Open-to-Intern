@@ -14,9 +14,9 @@ const createCollege = async (req, res) => {
 
         //Check Validations for provided data/Credentials
         if(Object.keys(data).length === 0) return res.status(400).send({status: false, message: "Please provide required information"})
-        if(!isValid(name) || validString(name)) return res.status(400).send({status:false, message: "Invalid name"})
-        if(!isValid(fullName) || validString(fullName)) return res.status(400).send({status:false, message: "Invalid Fullname"})
-        if(!isValid(logoLink) || validUrl.isUri(logoLink)) return res.status(400).send({status:false, message: "Invalid Logo Link"})
+        if(!isValid(name) || !validString(name)) return res.status(400).send({status:false, message: "Invalid name"})
+        if(!isValid(fullName) || !validString(fullName)) return res.status(400).send({status:false, message: "Invalid Fullname"})
+        if(!isValid(logoLink) || !validUrl.isUri(logoLink)) return res.status(400).send({status:false, message: "Invalid Logo Link"})
 
         let findCollege = await collegeModel.find({$or: [{name : name},{fullName : fullName}]})
         if(findCollege) return res.status(400).send({status:false, message: "College Already Exists"})
