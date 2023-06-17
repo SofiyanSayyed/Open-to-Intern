@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose')
 const routes = require('./routes/router')
-const PORT = 3000
+require('dotenv').config();
+const {PORT, DB_STRING} = process.env
 
 app.use(express.json())
 
-
-mongoose.connect("mongodb+srv://SofiyanSayyed:hsxRh6DS5ZlfI1Kj@cluster0.lnyemj3.mongodb.net/Sofiyan_1302", {
+mongoose.connect(DB_STRING, {
     useNewUrlParser : true
 })
 .then(() => console.log("MongoDB Connected"))
@@ -15,6 +15,6 @@ mongoose.connect("mongodb+srv://SofiyanSayyed:hsxRh6DS5ZlfI1Kj@cluster0.lnyemj3.
 
 app.use('/', routes)
 
-app.listen(process.env.PORT || PORT, function(){
+app.listen(PORT, function(){
     console.log("listening on port " + PORT)
 })

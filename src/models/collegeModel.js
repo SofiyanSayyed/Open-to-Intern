@@ -6,7 +6,7 @@ const collegeSchema = new mongoose.Schema({
     name: {
         required: true,
         type: String,
-        unique: true
+        unique: [true, "Name already Exist"]
     },
     fullName: {
         required: true,
@@ -20,6 +20,7 @@ const collegeSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-})
+}, {timestamps: true}
+)
 
 module.exports = mongoose.model('College', collegeSchema);

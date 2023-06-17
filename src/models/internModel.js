@@ -5,22 +5,23 @@ const mongoose = require('mongoose');
 const internSchema = new mongoose.Schema({
     name:{
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
+        required: true,
         unique: true,
-        validate: {
-            validator: function (value) {
-              return /^\S+@\S+\.\S+$/.test(value);
-            },
-            message: 'Invalid email address',
-          }
     },
     mobile: {
         type: String,
+        required: true,
         unique: true
-    }    
-})
+    },
+    collegeId:{
+        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'College'
+    }
+},{timestamps:true})
 
 module.exports = mongoose.model('Intern', internSchema);
