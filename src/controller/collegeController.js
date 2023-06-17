@@ -18,7 +18,7 @@ const createCollege = async (req, res) => {
         if(!isValid(fullName) || !validString(fullName)) return res.status(400).send({status:false, message: "Invalid Fullname"})
         if(!isValid(logoLink) || !validUrl.isUri(logoLink)) return res.status(400).send({status:false, message: "Invalid Logo Link"})
 
-        let findCollege = await collegeModel.findOne({$or: [{name : name},{fullName : fullName}]})
+        let findCollege = await collegeModel.findOne({name : name})
         if(findCollege) return res.status(400).send({status:false, message: "College Already Exists"})
 
         let createCollege = await collegeModel.create(data);
