@@ -1,5 +1,6 @@
 const collegeModel = require('../models/collegeModel');
 const internModel = require('../models/internModel');
+const validUrl = require('valid-url')
 const {isValid, validString} = require('../validators/validations');
 
 const createCollege = async (req, res) => {
@@ -7,12 +8,18 @@ const createCollege = async (req, res) => {
         let data = req.body;
         let {name, fullName, logoLink} = data
 
+        if(!name || !fullName || !logoLink){
+            return res.status(400).send({status: false, message: "Enter all required credentials"})
+        }
+
         //Check Validations for provided data/Credentials
         if(Object.keys(data).length === 0) return res.status(400).send({status: false, message: "Please provide required information"})
         if(!isValid(name) || validString(name)) return res.status(400).send({status:false, meassage: "Invalid name"})
         if(!isValid(fullName) || validString(fullName)) return res.status(400).send({status:false, meassage: "Invalid Fullname"})
-        if(!isValid(logoLink)) return res.status(400).send({status:false, meassage: "Invalid Longo Link"})
+        if(!isValid(logoLink) || validUrl.isUri(logoLink)) return res.status(400).send({status:false, meassage: "Invalid Logo Link"})
 
+        let findCollege = await collegeModel.find({$or: [{name : name},{fullName : fullName}]})
+        if(findCollege) return res.status(400).send({status:false, message: "College Already Exists"})
 
         let createCollege = await collegeModel.create(data);
         if(!createCollege) return res.status(404).send({ message: "error creating"})
@@ -29,7 +36,7 @@ const createCollege = async (req, res) => {
 const getColleges = async function(req,res){
     try{
         let {collegeName} = req.query
-        if(!collegeName) return res.status(400).send({status: false, message: "please provide College name"})
+        if(!collegeName) return res.status(404).send({status: false, message: "please provide College name"})
 
         let college = await collegeModel.findOne({name: collegeName, isDeleted: false})
         if(!college) return res.status(404).send({status:false, message: "College name not found"})

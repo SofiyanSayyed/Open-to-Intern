@@ -13,13 +13,13 @@ const createIntern = async (req, res) => {
         //Checking Validation for credentials
         if(Object.keys(data).length === 0) return res.status(400).send({status: false, message: "Please provide required information"})
         if(!name || !email || !mobile ) return res.status(400).send({status: false, message: "Please provide information"});
-        if(!isValid(name) || !validString(name)) return res.status(400).send({status:false, meassage: "Invalid Name"})
-        if(!validEmail(email)) return res.status(400).send({status:false, meassage: "Invalid Email"})
-        if(!validator.isMobilePhone(mobile)) return res.status(400).send({status:false, meassage: "Invalid Mobile Number"})
+        if(!isValid(name) || !validString(name)) return res.status(400).send({status:false, message: "Invalid Name"})
+        if(!validEmail(email)) return res.status(400).send({status:false, message: "Invalid Email"})
+        if(!validator.isMobilePhone(mobile)) return res.status(400).send({status:false, message: "Invalid Mobile Number"})
         
         //Check if the college Id is incorrect
         let isCollege = await collegeModel.findById(collegeId)
-        if(!isCollege) return res.status(404).send({status:false, message: "College not found"})
+        if(!isCollege) return res.status(400).send({status:false, message: "College not found"})
 
         let intern = await internModel.create(data)
         return res.status(201).send({status: true, data: intern})
